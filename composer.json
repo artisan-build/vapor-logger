@@ -1,0 +1,46 @@
+{
+    "name": "grosv/laravel-package-template",
+    "description": "A repository template for Laravel packages",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ed Grosvenor",
+            "email": "ed.grosvenor@wickedviral.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.3",
+        "illuminate/support": "^7.0|^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.0",
+        "friendsofphp/php-cs-fixer": "^2.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Grosv\\LaravelPackageTemplate\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "App\\": "vendor/orchestra/testbench-core/laravel/app"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": "Grosv\\LaravelPackageTemplate\\LaravelPackageTemplateProvider"
+        }
+    },
+    "scripts": {
+        "lint": "php-cs-fixer fix -v",
+        "test:unit": "phpunit",
+        "test": [
+            "@lint",
+            "@test:unit"
+        ]
+    }
+}
