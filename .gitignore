@@ -2,3 +2,6 @@
 composer.lock
 .php_cs.cache
 .phpunit.result.cache
+.vapor/
+.env.production
+.env.staging

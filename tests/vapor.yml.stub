@@ -1,0 +1,15 @@
+id: 1
+name: test
+ignore:
+  - public/code-coverage
+  - storage/tests
+environments:
+  production:
+    memory: 1024
+    cli-memory: 1024
+    cli-timeout: 600
+    runtime: php-7.4
+    build:
+      - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
+      - 'php artisan event:cache'
+      - 'npm ci && npm run prod && rm -rf node_modules'
