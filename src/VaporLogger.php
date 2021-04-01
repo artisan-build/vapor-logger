@@ -59,16 +59,18 @@ class VaporLogger extends AbstractHandler
                     Cache::rememberForever('vapor-logger.inactive', fn () => self::SUSPENDED);
                     break;
                 default:
-                    // We don't know what went wrong, so take a 10 second break.
-                    Cache::remember('vapor-logger.inactive', 10, fn () => self::UNKNOWN);
+                    // We don't know what went wrong, so take a >=10 second break.
+                    Cache::remember('vapor-logger.inactive',
+                        max((int) config('vapor-logger.throttle.failure'), 10), fn () => self::UNKNOWN);
                     break;
             }
 
             return false;
         }
 
-        // We saved the record to the log. Let's remember that for one second so we don't send it again too soon.
-        Cache::remember(crc32(Arr::get($record, 'extra.event')), 1, fn () => time());
+        // We saved the record to the log. Let's remember that for >=1 second so we don't send it again too soon.
+        Cache::remember(crc32(Arr::get($record, 'extra.event')),
+            max((int) config('vapor-logger.throttle.identical'), 1), fn () => time());
 
         return true;
     }
