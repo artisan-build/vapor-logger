@@ -2,8 +2,10 @@
 
 namespace ArtisanBuild\VaporLogger;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class VaporLoggerProvider extends ServiceProvider
@@ -27,6 +29,13 @@ class VaporLoggerProvider extends ServiceProvider
             ]);
 
             Config::set('logging.default', 'vapor-stack');
+
+            $this->app->booted(function () {
+                $schedule = $this->app->make(Schedule::class);
+                $schedule->call(function (): void {
+                    Log::debug('The vapor-logger package is managing logging for this environment.');
+                })->hourly();
+            });
         }
     }
 
