@@ -21,6 +21,8 @@ class VaporLogger extends AbstractHandler
             $vapor = Yaml::parse(File::get(base_path('vapor.yml')));
             Arr::set($record['extra'], 'vapor_id', $vapor['id'] ?? null);
             Arr::set($record['extra'], 'vapor_name', $vapor['name'] ?? null);
+            Arr::set($record['extra'],'vapor_env',
+                last(explode('-', $_SERVER['VAPOR_SSM_PATH'] ?? '-default')));
         }
 
         Arr::set($record['extra'], 'event', $record['level'] . $record['message']);

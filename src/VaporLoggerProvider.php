@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Arr;
 
 class VaporLoggerProvider extends ServiceProvider
 {
@@ -18,13 +19,13 @@ class VaporLoggerProvider extends ServiceProvider
             // in Laravel.
             Config::set('logging.channels.vapor-logger', [
                 'driver'  => 'monolog',
-                'level'   => config('valor-logger.log_level', 'debug'),
+                'level'   => config('vapor-logger.log_level', 'debug'),
                 'handler' => VaporLogger::class,
             ]);
 
             Config::set('logging.channels.vapor-stack', [
                 'driver'            => 'stack',
-                'channels'          => ['stderr', 'vapor-logger'],
+                'channels'          => array_merge(['stderr', 'vapor-logger'], config('vapor-logger.add_channels')),
                 'ignore_exceptions' => false,
             ]);
 

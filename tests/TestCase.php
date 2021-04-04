@@ -40,4 +40,12 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('vapor-logger.api_key', Str::random(16));
         $app['config']->set('vapor-logger.is_vapor', true);
     }
+
+    protected function isEnabledOnVaporWithSlack($app)
+    {
+        File::put(base_path('vapor.yml'), File::get(__DIR__ . '/vapor.yml.stub'));
+        $app['config']->set('vapor-logger.api_key', Str::random(16));
+        $app['config']->set('vapor-logger.is_vapor', true);
+        $app['config']->set('vapor-logger.add_channels', ['slack']);
+    }
 }
