@@ -37,7 +37,6 @@ class ConfigurationTest extends TestCase
         Log::channel('vapor-stack')->assertLogged('debug');
         Log::channel('stack')->assertNotLogged('debug');
 
-
         $this->assertContains('slack', config('logging.channels.vapor-stack.channels'));
     }
 

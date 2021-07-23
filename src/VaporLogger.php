@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Monolog\Handler\AbstractHandler;
 use Symfony\Component\Yaml\Yaml;
+use Throwable;
 
 class VaporLogger extends AbstractHandler
 {
@@ -17,6 +18,10 @@ class VaporLogger extends AbstractHandler
 
     public function handle(array $record): bool
     {
+        Arr::set($record['extra'], 'vapor_id', 1);
+        Arr::set($record['extra'], 'vapor_name', config('app.name'));
+        Arr::set($record['extra'], 'vapor_env', config('app.env'));
+
         if (File::exists(base_path('vapor.yml'))) {
             $vapor = Yaml::parse(File::get(base_path('vapor.yml')));
             Arr::set($record['extra'], 'vapor_id', $vapor['id'] ?? null);
@@ -26,6 +31,13 @@ class VaporLogger extends AbstractHandler
         }
 
         Arr::set($record['extra'], 'event', $record['level'] . $record['message']);
+
+        if (isset($record['context']['exception']) && $record['context']['exception'] instanceof Throwable) {
+            $trace = $record['context']['exception']->getTrace();
+            Arr::set($record['extra'], 'trace', $trace);
+            $record['message'] .= ' in ' . data_get($trace[0], 'file');
+            $record['message'] .= ' at line ' . data_get($trace[0], 'line');
+        }
 
         // Not configured. So just disable and don't bother our server.
         if (! config('vapor-logger.api_key')) {
@@ -46,6 +58,7 @@ class VaporLogger extends AbstractHandler
 
         // Send the record to the API to be recorded and expect a 201 result if all goes well.
         $save = Http::withToken(config('vapor-logger.api_key'))
+            ->timeout(1)
             ->post(config('vapor-logger.api_url'), $record);
 
         // We will turn off the logger for a period of time if there is a problem with the

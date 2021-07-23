@@ -3,7 +3,7 @@
 return [
     'api_key' => env('VAPOR_LOGGER_KEY', null),
     'api_url' => env('VAPOR_LOGGER_API', 'https://api.vaporlog.co/api/log'), // POST Url to capture logs
-    'is_vapor' => isset($_SERVER['VAPOR_SSM_PATH']),
+    'is_vapor' => env('VAPOR_LOGGER_IS_VAPOR', isset($_SERVER['VAPOR_SSM_PATH'])),
     'log_level' => env('VAPOR_LOGGER_LEVEL', env('LOG_LEVEL', 'debug')),
     'add_channels' => strlen(env('VAPOR_LOGGER_ADD_CHANNELS', '')) === 0 ? []
         : explode(',', env('VAPOR_LOGGER_ADD_CHANNELS')),
