@@ -22,6 +22,42 @@ composer require artisan-build/vapor-logger
 
 Then go to [VaporLog](https://vaporlog.co), create an account, and follow the instructions there to activate your project.
 
+### Configuration
+
+We designed this package to work out of the box when included in any Vapor-deployed Laravel site that has a [vaporlog.co](https://vaporlog.co) API key in the deployment's environment. But if you want to get fancy, there are some things you can tweak:
+
+```php
+return [
+    'api_key' => env('VAPOR_LOGGER_KEY', null),
+    'api_url' => env('VAPOR_LOGGER_API', 'https://api.vaporlog.co/api/log'), // POST Url to capture logs
+    'is_vapor' => env('VAPOR_LOGGER_IS_VAPOR', isset($_SERVER['VAPOR_SSM_PATH'])),
+    'log_level' => env('VAPOR_LOGGER_LEVEL', env('LOG_LEVEL', 'debug')),
+    'add_channels' => strlen(env('VAPOR_LOGGER_ADD_CHANNELS', '')) === 0 ? []
+        : explode(',', env('VAPOR_LOGGER_ADD_CHANNELS')),
+    'throttle' => [
+        'identical' => env('VAPOR_LOGGER_IDENTICAL_THROTTLE', 1),
+        'failure' => env('VAPOR_LOGGER_FAILURE_THROTTLE', 10),
+    ],
+    'heartbeat' => env('VAPOR_LOGGER_HEARTBEAT', false),
+];
+```
+
+**VAPOR_LOGGER_KEY** - This is the API key that you get when you log in to vaporlog.co.
+
+**VAPOR_LOGGER_API** - If you want to use this package to send logs to your own logging API, you can do that by setting the URL here. 
+
+**VAPOR_LOGGER_IS_VAPOR** - By default this package only works for Vapor-deployed sites, but if you really want to use it outside of Vapor I suppose you can by setting this to true.
+
+**VAPOR_LOGGER_LEVEL** - This is the minimum log level that will be sent to the API. We've found setting this to DEBUG gives us the most useful logs, but everyone's taste is different.
+
+**VAPOR_LOG_ADD_CHANNELS** - A comma separated list of additional channels you want to use. By default, your logs will be sent to vaporlog.co as well as the Vapor-provided default (AWS CloudWatch). This variable only **adds** new log channels, it does not replace them.
+
+**VAPOR_LOGGER_IDENTICAL_THROTTLE** - We only send the same message to the API once per second. You can change this, but you can only make it bigger. If you change it to 10, we'll only send identical messages once every 10 seconds.
+
+**VAPOR_LOGGER_FAILURE_THROTTLE** - If the API returns an error status, we stop trying to log for 10 seconds to let things recover. There's no point in either of us spending money for something to not work. As soon as a success status is returned, logging returns to its normal pace.
+
+**VAPOR_LOGGER_HEARTBEAT** - If you want some assurance that the package is working, you can set this to true and once an hour your site will send an info log to vaporlog saying that it's active.
+
 ### Contributing
 
 See a bug? See room for improvement? We welcome your pull request. If you make a contribution that gets merged, we'll shoot you a credit for free logging at [VaporLog](https://vaporlog.co).

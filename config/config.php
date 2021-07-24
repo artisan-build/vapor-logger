@@ -11,4 +11,5 @@ return [
         'identical' => env('VAPOR_LOGGER_IDENTICAL_THROTTLE', 1),
         'failure' => env('VAPOR_LOGGER_FAILURE_THROTTLE', 10),
     ],
+    'heartbeat' => env('VAPOR_LOGGER_HEARTBEAT', false),
 ];

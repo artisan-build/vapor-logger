@@ -31,12 +31,15 @@ class VaporLoggerProvider extends ServiceProvider
 
             Config::set('logging.default', 'vapor-stack');
 
-            $this->app->booted(function () {
-                $schedule = $this->app->make(Schedule::class);
-                $schedule->call(function (): void {
-                    Log::debug('The vapor-logger package is managing logging for this environment.');
-                })->hourly();
-            });
+            if (config('vapor-logger.heartbeat')) {
+                $this->app->booted(function () {
+                    $schedule = $this->app->make(Schedule::class);
+                    $schedule->call(function (): void {
+                        Log::debug('The vapor-logger package is managing logging for this environment.');
+                    })->hourly();
+                });
+            }
+
         }
     }
 
