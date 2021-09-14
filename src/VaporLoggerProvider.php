@@ -13,6 +13,10 @@ class VaporLoggerProvider extends ServiceProvider
 {
     public function boot(): void
     {
+        if (Cache::get('vapor-logger-deployment') !== data_get($_SERVER, 'VAPOR_ARTIFACT_NAME')) {
+            Cache::forget('vapor-logger-inactive');
+            Cache::rememberForever('vapor-logger-deployment', fn() => data_get($_SERVER, 'VAPOR_ARTIFACT_NAME'));
+        }
         if (Cache::get('vapor-logger-inactive', null) === null
             && (config('vapor-logger.is_vapor'))) {
             // We are running in Vapor or don't care that we aren't so we will override the logging settings

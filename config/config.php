@@ -13,3 +13,5 @@ return [
     ],
     'heartbeat' => env('VAPOR_LOGGER_HEARTBEAT', false),
 ];
+
+//"VAPOR_ARTIFACT_NAME" => "lake-county-film-festival-b3033abe-932c-471a-a08b-fce1630e785c"
