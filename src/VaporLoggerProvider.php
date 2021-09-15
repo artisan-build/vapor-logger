@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
-use Monolog\Formatter\HtmlFormatter;
 
 class VaporLoggerProvider extends ServiceProvider
 {
