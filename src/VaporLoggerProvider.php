@@ -3,6 +3,7 @@
 namespace ArtisanBuild\VaporLogger;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
@@ -44,6 +45,11 @@ class VaporLoggerProvider extends ServiceProvider
             }
 
         }
+
+        Artisan::command('vl:cache:clear', function() {
+            Cache::forget('vapor-logger-inactive');
+            return 0;
+        });
     }
 
     public function register(): void
