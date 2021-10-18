@@ -41,7 +41,7 @@ class VaporLogger extends AbstractHandler
 
         // Not configured. So just disable and don't bother our server.
         if (! config('vapor-logger.api_key')) {
-            Cache::rememberForever('vapor-logger.inactive', fn () => self::UNAUTHORIZED);
+            Cache::remember('vapor-logger.inactive', 300, fn () => self::UNAUTHORIZED);
 
             return false;
         }
@@ -67,11 +67,11 @@ class VaporLogger extends AbstractHandler
             switch ($save->status()) {
                 case 401:
                     // Account cannot be determined with token used in the request.
-                    Cache::rememberForever('vapor-logger.inactive', fn () => self::UNAUTHORIZED);
+                    Cache::remember('vapor-logger.inactive', 300, fn () => self::UNAUTHORIZED);
                     break;
                 case 403:
                     // Account suspended for non-payment or other reason
-                    Cache::rememberForever('vapor-logger.inactive', fn () => self::SUSPENDED);
+                    Cache::remember('vapor-logger.inactive', 300, fn () => self::SUSPENDED);
                     break;
                 default:
                     // We don't know what went wrong, so take a >=10 second break.

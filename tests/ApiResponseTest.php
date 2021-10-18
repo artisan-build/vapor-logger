@@ -65,11 +65,11 @@ class ApiResponseTest extends TestCase
 
         $this->assertEquals(VaporLogger::UNAUTHORIZED, Cache::get('vapor-logger.inactive'));
 
-        TestTime::addDay();
+        TestTime::addMinute();
 
         Log::debug('This is only a test');
 
-        Http::assertSentCount(1);
+       Http::assertSentCount(1);
 
         $this->assertEquals(VaporLogger::UNAUTHORIZED, Cache::get('vapor-logger.inactive'));
     }
@@ -94,7 +94,7 @@ class ApiResponseTest extends TestCase
 
         $this->assertEquals(VaporLogger::SUSPENDED, Cache::get('vapor-logger.inactive'));
 
-        TestTime::addDay();
+        TestTime::addMinute();
 
         Log::debug('This is only a test');
 
