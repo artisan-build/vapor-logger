@@ -14,5 +14,6 @@
     <env name="APP_ENV" value="testing"/>
     <env name="APP_DEBUG" value="true"/>
     <env name="CACHE_DRIVER" value="file"/>
+    <env name="LOG_LEVEL" value="debug"/>
   </php>
 </phpunit>

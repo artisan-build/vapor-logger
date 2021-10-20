@@ -12,7 +12,7 @@ abstract class TestCase extends BaseTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->artisan('cache:clear');
+        \Cache::flush();
     }
 
     public function tearDown(): void
@@ -20,6 +20,7 @@ abstract class TestCase extends BaseTestCase
         if (File::exists(base_path('vapor.yml'))) {
             File::delete(base_path('vapor.yml'));
         }
+        \Cache::flush();
         parent::tearDown();
     }
 
