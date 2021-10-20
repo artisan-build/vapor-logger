@@ -93,7 +93,7 @@ class ApiResponseTest extends TestCase
 
         Log::debug('This is only a test');
 
-       // Http::assertSentCount(1);
+        Http::assertSentCount(1);
 
         $this->assertEquals(VaporLogger::UNAUTHORIZED, Cache::get('vapor-logger.inactive'));
 
